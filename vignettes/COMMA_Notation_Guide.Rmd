@@ -1,0 +1,73 @@
+---
+title: "COMMA Notation Guide"
+author: "Kimberly Webb"
+date: "2024-04-23"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{COMMA Notation Guide}
+  %\usepackage[UTF-8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(kableExtra)
+```
+
+This guide is designed to summarize key notation and quantities used the *COMMA* R Package and associated publications.
+
+```{r}
+Term <- c("$X$", "$C$", "$Z$", "$Y$",
+          "M", "$m_{ij}$", "$M^*$", "$m^*_{i \\ell}$",
+          "True Mediator Mechanism", "Observed Mediator Mechanism",
+          "Outcome Mechanism",
+          "$\\pi_{ij}$", "$\\pi^*_{i \\ell j}$", "$\\pi^*_{i \\ell}$", "$\\pi^*_{jj}$",
+          "Sensitivity", "Specificity",
+          "$\\beta_X$", "$\\gamma_{11Z}$", "$\\gamma_{12Z}$",
+          "$\\theta_X$", "$\\theta_M$", "$\\theta_{XM}$")
+Definition <- c("--", "--", "--", "--",
+                "$M \\in \\{1, 2\\}$", "$\\mathbb{I}\\{M_i = j\\}$",
+                "$M^* \\in \\{1, 2\\}$", "$\\mathbb{I}\\{M^*_i = \\ell \\}$",
+                "$\\text{logit} \\{ P(M = 1 | X, C ; \\beta) \\} = \\beta_{0} + \\beta_{X} X + \\beta_{C} C$",
+                "$\\text{logit}\\{ P(M^* = 1 | M = m, Z ; \\gamma) \\} = \\gamma_{1m0} + \\gamma_{1mZ} Z$",
+                "$E(Y| X, C, M ; \\theta) \\} = \\theta{0} + \\theta_{X} X + \\theta_{C} C \\theta_{M}M + \\theta_{XM}XM$",
+                "$P(M_i = j | X, C ; \\beta) = \\frac{\\text{exp}\\{\\beta_{j0} + \\beta_{jX} X_i + \\beta_{jC} C_i\\}}{1 + \\text{exp}\\{\\beta_{j0} + \\beta_{jX} X_i + \\beta_{jC} C_i\\}}$",
+                "$P(M^*_i = \\ell | M_i = j, Z ; \\gamma) = \\frac{\\text{exp}\\{\\gamma_{\\ell j 0} + \\gamma_{ \\ell jZ} Z_i\\}}{1 + \\text{exp}\\{\\gamma_{\\ell j0} + \\gamma_{kjZ} Z_i\\}}$",
+                "$P(M^*_i = \\ell | M_i, X, Z ; \\gamma) = \\sum_{j = 1}^2 \\pi^*_{i \\ell j} \\pi_{ij}$",
+                "$P(M^* = j | M = j, Z ; \\gamma) = \\sum_{i = 1}^N \\pi^*_{ijj}$",
+                "$P(M^* = 1 | M = 1, Z ; \\gamma) = \\sum_{i = 1}^N \\pi^*_{i11}$",
+                "$P(M^* = 2 | M = 2, Z ; \\gamma) = \\sum_{i = 1}^N \\pi^*_{i22}$",
+                "--", "--", "--", "--", "--", "--")
+Description <- c("Predictor matrix for the true mediator and outcome.",
+                 "Covariate matrix for the true mediator and outcome.",
+                 "Predictor matrix for the observed mediator, conditional on the true mediator",
+                 "Outcome variable.",
+                 "True binary mediator. Reference category is 2.",
+                 "Indicator for the true binary mediator.",
+                 "Observed binary mediator. Reference category is 2.",
+                 "Indicator for the observed binary mediator.",
+                 "Relationship between $X$ and $C$ and the true mediator, $M$.",
+                 "Relationship between $Z$ and the observed mediator, $M^*$, given the true mediator $M$.",
+                 "Relationship between $X$, $C$, and $M$ and the outcome of interest $Y$.",
+                 "Response probability for individual $i$'s true mediator category.",
+                 "Response probability for individual $i$'s observed mediator category, conditional on the true mediator.",
+                 "Response probability for individual $i$'s observed mediator cateogry.",
+                 "Average probability of correct classification for category $j$.",
+                 "True positive rate. Average probability of observing mediator $k = 1$, given the true mediator $j = 1$.",
+                 "True negative rate. Average probability of observing mediator $k = 2$, given the true mediator $j = 2$.",
+                 "Association parameter of interest in the true mediator mechanism.",
+                 "Association parameter of interest in the observed mediator mechanism, given $j=1$.",
+                 "Association parameter of interest in the observed mediator mechanism, given $j=2$.",
+                 "Association parameter of interest in the outcome mechanism.",
+                 "Association parameter relating the true mediator to the outcome.",
+                 "Association parameter for the interaction between $X$ and $M$ in the outcome mechanism.")
+
+
+notation_table <- data.frame(Term, Definition, Description)
+```
+
+```{r}
+kableExtra::kbl(notation_table, escape = FALSE, booktabs = TRUE) %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
+```

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Demonstration of the COMMA R Package</title>
+<style type="text/css">
+/**
+ * Prism.s theme ported from highlight.js's xcode style
+ */
+pre code {
+  padding: 1em;
+}
+.token.comment {
+  color: #007400;
+}
+.token.punctuation {
+  color: #999;
+}
+.token.tag,
+.token.selector {
+  color: #aa0d91;
+}
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol {
+  color: #1c00cf;
+}
+.token.property,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin {
+  color: #c41a16;
+}
+.token.inserted {
+  background-color: #ccffd8;
+}
+.token.deleted {
+  background-color: #ffebe9;
+}
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #9a6e3a;
+}
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #836c28;
+}
+.token.function,
+.token.class-name {
+  color: #DD4A68;
+}
+.token.regex,
+.token.important,
+.token.variable {
+  color: #5c2699;
+}
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+.token.italic {
+  font-style: italic;
+}
+</style>
+<style type="text/css">
+body {
+  font-family: sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+body, .footnotes, code { font-size: .9em; }
+li li { font-size: .95em; }
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+pre, img { max-width: 100%; }
+pre, pre:hover {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+pre code {
+  display: block;
+  overflow-x: auto;
+}
+code { font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace; }
+:not(pre) > code, code[class] { background-color: #F8F8F8; }
+code.language-undefined, pre > code:not([class]) {
+  background-color: inherit;
+  border: 1px solid #eee;
+}
+table {
+  margin: auto;
+  border-top: 1px solid #666;
+}
+table thead th { border-bottom: 1px solid #ddd; }
+th, td { padding: 5px; }
+thead, tfoot, tr:nth-child(even) { background: #eee; }
+blockquote {
+  color: #666;
+  margin: 0;
+  padding-left: 1em;
+  border-left: 0.5em solid #eee;
+}
+hr, .footnotes::before { border: 1px dashed #ddd; }
+.frontmatter { text-align: center; }
+#TOC .numbered li { list-style: none; }
+#TOC .numbered { padding-left: 0; }
+#TOC .numbered ul { padding-left: 1em; }
+table, .body h2 { border-bottom: 1px solid #666; }
+.body .appendix, .appendix ~ h2 { border-bottom-style: dashed; }
+.footnote-ref a::before { content: "["; }
+.footnote-ref a::after { content: "]"; }
+section.footnotes::before {
+  content: "";
+  display: block;
+  max-width: 20em;
+}
+
+@media print {
+  body {
+    font-size: 12pt;
+    max-width: 100%;
+  }
+  tr, img { page-break-inside: avoid; }
+}
+@media only screen and (min-width: 992px) {
+  pre { white-space: pre; }
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+</head>
+<body>
+<div class="frontmatter">
+<div class="title"><h1>Demonstration of the COMMA R Package</h1></div>
+<div class="author"><h2>Created by Kimberly A. Hochstedler Webb. Contact: <a href="mailto:kah343@cornell.edu">kah343@cornell.edu</a></h2></div>
+<div class="date"><h3>2024-04-23</h3></div>
+</div>
+<div class="body">
+<p>\raggedright</p>
+<p>In this vignette, we provide a demonstration of the R Package <em>COMMA</em> (correcting misclassified mediation analysis). This package provides methods for estimating a mediation analysis when the binary mediator is potentially misclassified. Technical details about estimation are not included in this demonstration. For additional information on the methods used in this R Package, please consult ``Effect estimation in the presence of a misclassified binary mediator’’ by Kimberly A. Hochstedler Webb and Martin T. Wells.</p>
+<h1 id="model-and-conceptual-framework">Model and Conceptual Framework</h1>
+<p>Let \(X\) denote a predictor of interest. \(C\) denotes a matrix of covariates. \(Y\) is the outcome variable of interest. The relationship between \(X\) and \(Y\) may be mediated by \(M\). \(M = m\) denotes an observation’s true mediator value, with \(m \in \{1, 2\}\). We do not observe \(M\) directly. Instead, we observe \(M^*\), a potentially misclassified (noisy) version of \(M\). Given \(M\), a subject’s observed mediator value \(M^*\) depends on a set of predictors \(Z\). The true mediator, observed mediator, and outcome mechanisms are provided below.</p>
+<p>$$\text{True mediator mechanism: } \text{logit}\{ P(M = 1 | X, \boldsymbol{C} ; \boldsymbol{\beta}) \} = \beta_{0} + \beta_{X} X + \boldsymbol{\beta_{C} C}$$
+$$\text{Observed mediator mechanisms: } \text{logit}\{ P(M^* = 1 | M = 1, \boldsymbol{Z} ; \boldsymbol{\gamma}) \} = \gamma_{110} + \boldsymbol{\gamma_{11Z} Z}, \\ \text{logit}\{ P(M^* = 1 | M = 2, \boldsymbol{Z} ; \boldsymbol{\gamma}) \} = \gamma_{120} + \boldsymbol{\gamma_{12Z} Z}$$
+$$\text{Outcome mechanism: } E(Y | X, \boldsymbol{C}, M) = \theta_0 + \theta_X X + \boldsymbol{\theta_C C} + \theta_M M + \theta_{XM} XM$$
+If we have a Bernoulli outcome that we model with a logit link, the <em>outcome mechanism</em> can be
+\(\text{logit}\{P(Y = 1 | X, \boldsymbol{C}, M) \} = \theta_0 + \theta_X X + \boldsymbol{\theta_C C} + \theta_m M + \theta_{XM} XM\).</p>
+<h1 id="simulate-data-normal-outcome">Simulate data - Normal outcome</h1>
+<p>We begin this demonstration by generating data using the <code>COMMA_data()</code> function. The binary mediator simulated by this scheme is subject to misclassification. The predictor related to the true outcome mechanism is “x” and the predictor related to the observation mechanism is “z”.</p>
+<pre><code class="language-r">library(COMMA)
+library(dplyr)
+
+set.seed(20240422)
+
+sample_size &lt;- 10000
+
+n_cat &lt;- 2 # Number of categories in the binary mediator
+
+# Data generation settings
+x_mu &lt;- 0
+x_sigma &lt;- 1
+z_shape &lt;- 1
+z_scale &lt;- 1
+c_shape &lt;- 1
+
+# True parameter values (gamma terms set the misclassification rate)
+true_beta &lt;- matrix(c(1, -2, .5), ncol = 1)
+true_gamma &lt;- matrix(c(1.8, 1, -1.5, -1), nrow = 2, byrow = FALSE) 
+true_theta &lt;- matrix(c(1, 1.5, -2.5, -.2), ncol = 1)
+
+# Generate data.
+my_data &lt;- COMMA_data(sample_size, x_mu, x_sigma, z_shape, c_shape,
+                      interaction_indicator = FALSE,
+                      outcome_distribution = &quot;Normal&quot;,
+                      true_beta, true_gamma, true_theta)
+
+# Save list elements as vectors.
+Mstar = my_data[[&quot;obs_mediator&quot;]]
+Mstar_01 &lt;- ifelse(Mstar == 1, 1, 0)
+outcome = my_data[[&quot;outcome&quot;]]
+x_matrix = my_data[[&quot;x&quot;]]
+z_matrix = my_data[[&quot;z&quot;]]
+c_matrix = my_data[[&quot;c&quot;]]
+</code></pre>
+<h2 id="effect-estimation_1">Effect estimation</h2>
+<p>We propose estimation methods using the Expectation-Maximization algorithm (EM) and an ordinary least squares (OLS) correction procedure. The proposed predictive value weighting (PVW) approach detailed in Webb and Wells (2024) is currently only available for Bernoulli outcomes in <em>COMMA</em>. Each method checks and corrects instances of label switching, as described in Webb and Wells (2024). In the code below, we provide functions for implementing these methods.</p>
+<h3 id="em-algorithm_1">EM algorithm</h3>
+<pre><code class="language-r"># Supply starting values for all parameters.
+beta_start &lt;- coef(glm(Mstar_01 ~ x_matrix + c_matrix,
+                       family = &quot;binomial&quot;(link = &quot;logit&quot;)))
+gamma_start &lt;- matrix(rep(1,4), ncol = 2, nrow = 2, byrow = FALSE)
+theta_start &lt;- coef(lm(outcome ~ x_matrix + Mstar_01 + c_matrix))
+
+# Estimate parameters using the EM-Algorithm.
+EM_results &lt;- COMMA_EM(Mstar, outcome, outcome_distribution = &quot;Normal&quot;,
+                       interaction_indicator = FALSE,
+                       x_matrix, z_matrix, c_matrix,
+                       beta_start, gamma_start, theta_start, sigma_start = 1)
+
+EM_results$True_Value &lt;- c(true_beta, c(true_gamma), true_theta, 1)
+EM_results$Estimates &lt;- round(EM_results$Estimates, 3)
+EM_results
+</code></pre>
+<pre><code>##    Parameter Estimates Convergence True_Value
+## 1     beta_0     0.928        TRUE        1.0
+## 2     beta_1    -1.942        TRUE       -2.0
+## 3     beta_2     0.491        TRUE        0.5
+## 4    gamma11     1.749        TRUE        1.8
+## 5    gamma21     1.197        TRUE        1.0
+## 6    gamma12    -1.541        TRUE       -1.5
+## 7    gamma22    -0.830        TRUE       -1.0
+## 8    theta_0     1.017        TRUE        1.0
+## 9   theta_x1     1.502        TRUE        1.5
+## 10   theta_m    -2.525        TRUE       -2.5
+## 11  theta_c1    -0.199        TRUE       -0.2
+## 12     sigma     0.993        TRUE        1.0
+</code></pre>
+<h3 id="ols-correction">OLS correction</h3>
+<pre><code class="language-r"># Estimate parameters using the OLS correction.
+OLS_results &lt;- COMMA_OLS(Mstar, outcome,
+                         x_matrix, z_matrix, c_matrix,
+                         beta_start, gamma_start, theta_start)
+
+OLS_results$True_Value &lt;- c(true_beta, c(true_gamma), true_theta[c(1,3,2,4)])
+OLS_results$Estimates &lt;- round(OLS_results$Estimates, 3)
+OLS_results
+</code></pre>
+<pre><code>##    Parameter Estimates Convergence Method True_Value
+## 1      beta1     0.877        TRUE    OLS        1.0
+## 2      beta2    -1.794        TRUE    OLS       -2.0
+## 3      beta3     0.493        TRUE    OLS        0.5
+## 4    gamma11     1.788        TRUE    OLS        1.8
+## 5    gamma21     1.361        TRUE    OLS        1.0
+## 6    gamma12    -1.484        TRUE    OLS       -1.5
+## 7    gamma22    -1.487        TRUE    OLS       -1.0
+## 8     theta0     0.882        TRUE    OLS        1.0
+## 9    theta_m    -2.326        TRUE    OLS       -2.5
+## 10   theta_x     1.581        TRUE    OLS        1.5
+## 11  theta_c1    -0.203        TRUE    OLS       -0.2
+</code></pre>
+<h3 id="compare-results_1">Compare results</h3>
+<pre><code class="language-r">NormalY_results &lt;- data.frame(Parameter = rep(c(&quot;beta_x&quot;, &quot;theta_x&quot;, &quot;theta_m&quot;),
+                                              3),
+                              Method = c(rep(&quot;EM&quot;, 3), rep(&quot;OLS&quot;, 3),
+                                         rep(&quot;Naive&quot;, 3)),
+                              Estimate = c(EM_results$Estimates[c(2, 9, 10)],
+                                           OLS_results$Estimates[c(2, 9, 10)],
+                                           beta_start[2], theta_start[c(2,3)]),
+                              True_Value = rep(c(true_beta[2],
+                                                 true_theta[2], true_theta[3]),
+                                               3))
+
+ggplot(data = NormalY_results) +
+  geom_point(aes(x = Method, y = Estimate, color = Method),
+             size = 3) +
+  geom_hline(aes(yintercept = True_Value),
+             linetype = &quot;dashed&quot;) +
+  facet_wrap(~Parameter) +
+  theme_minimal() +
+  scale_color_manual(values = c(&quot;#DA86A5&quot;, &quot;#785E95&quot;, &quot;#409DBE&quot;)) +
+  ggtitle(&quot;Parameter estimates from EM, OLS, and Naive approaches&quot;,
+          subtitle = &quot;Normal outcome model with a misclassified mediator&quot;)
+</code></pre>
+<div class="figure" style="text-align: center">
+<img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-4"  />
+<p class="caption">plot of chunk unnamed-chunk-4</p>
+</div>
+<h1 id="simulate-data-bernoulli-outcome">Simulate data - Bernoulli outcome</h1>
+<p>Next, we generate data with a Bernoulli outcome using the <code>COMMA_data()</code> function. Once again, the binary mediator simulated by this scheme is subject to misclassification. The predictor related to the true outcome mechanism is “x” and the predictor related to the observation mechanism is “z”.</p>
+<pre><code class="language-r">library(COMMA)
+library(dplyr)
+
+set.seed(20240423)
+
+sample_size &lt;- 10000
+
+n_cat &lt;- 2 # Number of categories in the binary mediator
+
+# Data generation settings
+x_mu &lt;- 0
+x_sigma &lt;- 1
+z_shape &lt;- 1
+z_scale &lt;- 1
+c_shape &lt;- 1
+
+# True parameter values (gamma terms set the misclassification rate)
+true_beta &lt;- matrix(c(1, -2, .5), ncol = 1)
+true_gamma &lt;- matrix(c(1.8, 1, -1.5, -1), nrow = 2, byrow = FALSE) 
+true_theta &lt;- matrix(c(1, 1.5, -2.5, -.2, .5), ncol = 1)
+
+# Generate data.
+my_data &lt;- COMMA_data(sample_size, x_mu, x_sigma, z_shape, c_shape,
+                      interaction_indicator = TRUE,
+                      outcome_distribution = &quot;Bernoulli&quot;,
+                      true_beta, true_gamma, true_theta)
+
+# Save list elements as vectors.
+Mstar = my_data[[&quot;obs_mediator&quot;]]
+Mstar_01 &lt;- ifelse(Mstar == 1, 1, 0)
+outcome = my_data[[&quot;outcome&quot;]]
+x_matrix = my_data[[&quot;x&quot;]]
+z_matrix = my_data[[&quot;z&quot;]]
+c_matrix = my_data[[&quot;c&quot;]]
+</code></pre>
+<h2 id="effect-estimation_2">Effect estimation</h2>
+<p>We propose estimation methods using the Expectation-Maximization algorithm (EM) and a predictive value weighting (PVW) approach. The ordinary least squares (OLS) correction procedure is only appropriate for Normal outcome models. Each method checks and corrects instances of label switching, as described in Webb and Wells (2024). In the code below, we provide functions for implementing these methods.</p>
+<h3 id="em-algorithm_2">EM algorithm</h3>
+<pre><code class="language-r"># Supply starting values for all parameters.
+beta_start &lt;- coef(glm(Mstar_01 ~ x_matrix + c_matrix,
+                       family = &quot;binomial&quot;(link = &quot;logit&quot;)))
+gamma_start &lt;- matrix(rep(1,4), ncol = 2, nrow = 2, byrow = FALSE)
+
+xm_interaction &lt;- x_matrix * c_matrix
+theta_start &lt;- coef(glm(outcome ~ x_matrix + Mstar_01 + c_matrix +
+                          xm_interaction,
+                        family = &quot;binomial&quot;(link = &quot;logit&quot;)))
+
+# Estimate parameters using the EM-Algorithm.
+EM_results &lt;- COMMA_EM(Mstar, outcome, outcome_distribution = &quot;Bernoulli&quot;,
+                       interaction_indicator = TRUE,
+                       x_matrix, z_matrix, c_matrix,
+                       beta_start, gamma_start, theta_start)
+
+EM_results$True_Value &lt;- c(true_beta, c(true_gamma), true_theta)
+EM_results$Estimates &lt;- round(EM_results$Estimates, 3)
+EM_results
+</code></pre>
+<pre><code>##    Parameter Estimates Convergence True_Value
+## 1     beta_0     1.113        TRUE        1.0
+## 2     beta_1    -2.012        TRUE       -2.0
+## 3     beta_2     0.493        TRUE        0.5
+## 4    gamma11     1.698        TRUE        1.8
+## 5    gamma21     1.036        TRUE        1.0
+## 6    gamma12    -1.664        TRUE       -1.5
+## 7    gamma22    -1.550        TRUE       -1.0
+## 8    theta_0     1.067        TRUE        1.0
+## 9    theta_x     1.565        TRUE        1.5
+## 10   theta_m    -2.538        TRUE       -2.5
+## 11  theta_c1    -0.205        TRUE       -0.2
+## 12  theta_xm     0.427        TRUE        0.5
+</code></pre>
+<h3 id="pvw-approach">PVW approach</h3>
+<pre><code class="language-r">PVW_results &lt;- COMMA_PVW(Mstar, outcome, outcome_distribution = &quot;Bernoulli&quot;,
+                         interaction_indicator = TRUE,
+                         x_matrix, z_matrix, c_matrix,
+                         beta_start, gamma_start, theta_start)
+
+PVW_results$True_Value &lt;- c(true_beta, c(true_gamma), true_theta)
+PVW_results$Estimates &lt;- round(PVW_results$Estimates, 3)
+PVW_results
+</code></pre>
+<pre><code>##    Parameter Estimates Convergence Method True_Value
+## 1     beta_1     1.127        TRUE    PVW        1.0
+## 2     beta_2    -2.008        TRUE    PVW       -2.0
+## 3     beta_3     0.489        TRUE    PVW        0.5
+## 4    gamma11     1.704        TRUE    PVW        1.8
+## 5    gamma21     1.016        TRUE    PVW        1.0
+## 6    gamma12    -1.740        TRUE    PVW       -1.5
+## 7    gamma22    -1.517        TRUE    PVW       -1.0
+## 8    theta_0     0.998        TRUE    PVW        1.0
+## 9   theta_x1     1.678        TRUE    PVW        1.5
+## 10   theta_m    -2.463        TRUE    PVW       -2.5
+## 11  theta_c1    -0.204        TRUE    PVW       -0.2
+## 12  theta_xm     0.288        TRUE    PVW        0.5
+</code></pre>
+<h3 id="compare-results_2">Compare results</h3>
+<pre><code class="language-r">BernoulliY_results &lt;- data.frame(Parameter = rep(c(&quot;beta_x&quot;, &quot;theta_x&quot;,
+                                                   &quot;theta_m&quot;, &quot;theta_xm&quot;),
+                                                 3),
+                                 Method = c(rep(&quot;EM&quot;, 4), rep(&quot;PVW&quot;, 4),
+                                            rep(&quot;Naive&quot;, 4)),
+                                 Estimate = c(EM_results$Estimates[c(2, 9, 10, 12)],
+                                              PVW_results$Estimates[c(2, 9, 10, 12)],
+                                              beta_start[2],
+                                              theta_start[c(2,3,5)]),
+                                 True_Value = rep(c(true_beta[2],
+                                                    true_theta[2],
+                                                    true_theta[3],
+                                                    true_theta[5]),
+                                                  3))
+
+ggplot(data = BernoulliY_results) +
+  geom_point(aes(x = Method, y = Estimate, color = Method),
+             size = 3) +
+  geom_hline(aes(yintercept = True_Value),
+             linetype = &quot;dashed&quot;) +
+  facet_wrap(~Parameter) +
+  theme_minimal() +
+  scale_color_manual(values = c(&quot;#DA86A5&quot;, &quot;#785E95&quot;, &quot;#ECA698&quot;)) +
+  ggtitle(&quot;Parameter estimates from EM, PVW, and Naive approaches&quot;,
+          subtitle = &quot;Bernoulli outcome model with a misclassified mediator&quot;)
+</code></pre>
+<div class="figure" style="text-align: center">
+<img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-8"  />
+<p class="caption">plot of chunk unnamed-chunk-8</p>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/combine/npm/katex/dist/katex.min.js,npm/katex/dist/contrib/auto-render.min.js,npm/@xiee/utils/js/render-katex.js" defer></script>
+</body>
+</html>

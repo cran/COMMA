@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>COMMA Notation Guide</title>
+<style type="text/css">
+body {
+  font-family: sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+body, .footnotes, code { font-size: .9em; }
+li li { font-size: .95em; }
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+pre, img { max-width: 100%; }
+pre, pre:hover {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+pre code {
+  display: block;
+  overflow-x: auto;
+}
+code { font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace; }
+:not(pre) > code, code[class] { background-color: #F8F8F8; }
+code.language-undefined, pre > code:not([class]) {
+  background-color: inherit;
+  border: 1px solid #eee;
+}
+table {
+  margin: auto;
+  border-top: 1px solid #666;
+}
+table thead th { border-bottom: 1px solid #ddd; }
+th, td { padding: 5px; }
+thead, tfoot, tr:nth-child(even) { background: #eee; }
+blockquote {
+  color: #666;
+  margin: 0;
+  padding-left: 1em;
+  border-left: 0.5em solid #eee;
+}
+hr, .footnotes::before { border: 1px dashed #ddd; }
+.frontmatter { text-align: center; }
+#TOC .numbered li { list-style: none; }
+#TOC .numbered { padding-left: 0; }
+#TOC .numbered ul { padding-left: 1em; }
+table, .body h2 { border-bottom: 1px solid #666; }
+.body .appendix, .appendix ~ h2 { border-bottom-style: dashed; }
+.footnote-ref a::before { content: "["; }
+.footnote-ref a::after { content: "]"; }
+section.footnotes::before {
+  content: "";
+  display: block;
+  max-width: 20em;
+}
+
+@media print {
+  body {
+    font-size: 12pt;
+    max-width: 100%;
+  }
+  tr, img { page-break-inside: avoid; }
+}
+@media only screen and (min-width: 992px) {
+  pre { white-space: pre; }
+}
+</style>
+<script>
+$(document).ready(function(){
+    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    if ($('[data-toggle="popover"]').popover === 'function') {
+        $('[data-toggle="popover"]').popover();
+    }
+});
+</script>
+<link href="C:\Users\kimho\AppData\Local\R\win-library\4.3\kableExtra\lightable-0.0.1\lightable.css" rel="stylesheet" />
+</head>
+<body>
+<div class="frontmatter">
+<div class="title"><h1>COMMA Notation Guide</h1></div>
+<div class="author"><h2>Kimberly Webb</h2></div>
+<div class="date"><h3>2024-04-23</h3></div>
+</div>
+<div class="body">
+<p>This guide is designed to summarize key notation and quantities used the <em>COMMA</em> R Package and associated publications.</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Term </th>
+   <th style="text-align:left;"> Definition </th>
+   <th style="text-align:left;"> Description </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $X$ </td>
+   <td style="text-align:left;"> -- </td>
+   <td style="text-align:left;"> Predictor matrix for the true mediator and outcome. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $C$ </td>
+   <td style="text-align:left;"> -- </td>
+   <td style="text-align:left;"> Covariate matrix for the true mediator and outcome. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Z$ </td>
+   <td style="text-align:left;"> -- </td>
+   <td style="text-align:left;"> Predictor matrix for the observed mediator, conditional on the true mediator </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Y$ </td>
+   <td style="text-align:left;"> -- </td>
+   <td style="text-align:left;"> Outcome variable. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> M </td>
+   <td style="text-align:left;"> $M \in \{1, 2\}$ </td>
+   <td style="text-align:left;"> True binary mediator. Reference category is 2. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $m_{ij}$ </td>
+   <td style="text-align:left;"> $\mathbb{I}\{M_i = j\}$ </td>
+   <td style="text-align:left;"> Indicator for the true binary mediator. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $M^*$ </td>
+   <td style="text-align:left;"> $M^* \in \{1, 2\}$ </td>
+   <td style="text-align:left;"> Observed binary mediator. Reference category is 2. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $m^*_{i \ell}$ </td>
+   <td style="text-align:left;"> $\mathbb{I}\{M^*_i = \ell \}$ </td>
+   <td style="text-align:left;"> Indicator for the observed binary mediator. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> True Mediator Mechanism </td>
+   <td style="text-align:left;"> $\text{logit} \{ P(M = 1 | X, C ; \beta) \} = \beta_{0} + \beta_{X} X + \beta_{C} C$ </td>
+   <td style="text-align:left;"> Relationship between $X$ and $C$ and the true mediator, $M$. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Observed Mediator Mechanism </td>
+   <td style="text-align:left;"> $\text{logit}\{ P(M^* = 1 | M = m, Z ; \gamma) \} = \gamma_{1m0} + \gamma_{1mZ} Z$ </td>
+   <td style="text-align:left;"> Relationship between $Z$ and the observed mediator, $M^*$, given the true mediator $M$. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Outcome Mechanism </td>
+   <td style="text-align:left;"> $E(Y| X, C, M ; \theta) \} = \theta{0} + \theta_{X} X + \theta_{C} C \theta_{M}M + \theta_{XM}XM$ </td>
+   <td style="text-align:left;"> Relationship between $X$, $C$, and $M$ and the outcome of interest $Y$. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi_{ij}$ </td>
+   <td style="text-align:left;"> $P(M_i = j | X, C ; \beta) = \frac{\text{exp}\{\beta_{j0} + \beta_{jX} X_i + \beta_{jC} C_i\}}{1 + \text{exp}\{\beta_{j0} + \beta_{jX} X_i + \beta_{jC} C_i\}}$ </td>
+   <td style="text-align:left;"> Response probability for individual $i$'s true mediator category. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi^*_{i \ell j}$ </td>
+   <td style="text-align:left;"> $P(M^*_i = \ell | M_i = j, Z ; \gamma) = \frac{\text{exp}\{\gamma_{\ell j 0} + \gamma_{ \ell jZ} Z_i\}}{1 + \text{exp}\{\gamma_{\ell j0} + \gamma_{kjZ} Z_i\}}$ </td>
+   <td style="text-align:left;"> Response probability for individual $i$'s observed mediator category, conditional on the true mediator. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi^*_{i \ell}$ </td>
+   <td style="text-align:left;"> $P(M^*_i = \ell | M_i, X, Z ; \gamma) = \sum_{j = 1}^2 \pi^*_{i \ell j} \pi_{ij}$ </td>
+   <td style="text-align:left;"> Response probability for individual $i$'s observed mediator cateogry. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi^*_{jj}$ </td>
+   <td style="text-align:left;"> $P(M^* = j | M = j, Z ; \gamma) = \sum_{i = 1}^N \pi^*_{ijj}$ </td>
+   <td style="text-align:left;"> Average probability of correct classification for category $j$. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Sensitivity </td>
+   <td style="text-align:left;"> $P(M^* = 1 | M = 1, Z ; \gamma) = \sum_{i = 1}^N \pi^*_{i11}$ </td>
+   <td style="text-align:left;"> True positive rate. Average probability of observing mediator $k = 1$, given the true mediator $j = 1$. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Specificity </td>
+   <td style="text-align:left;"> $P(M^* = 2 | M = 2, Z ; \gamma) = \sum_{i = 1}^N \pi^*_{i22}$ </td>
+   <td style="text-align:left;"> True negative rate. Average probability of observing mediator $k = 2$, given the true mediator $j = 2$. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\beta_X$ </td>
+   <td style="text-align:left;"> -- </td>
+   <td style="text-align:left;"> Association parameter of interest in the true mediator mechanism. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\gamma_{11Z}$ </td>
+   <td style="text-align:left;"> -- </td>
+   <td style="text-align:left;"> Association parameter of interest in the observed mediator mechanism, given $j=1$. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\gamma_{12Z}$ </td>
+   <td style="text-align:left;"> -- </td>
+   <td style="text-align:left;"> Association parameter of interest in the observed mediator mechanism, given $j=2$. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\theta_X$ </td>
+   <td style="text-align:left;"> -- </td>
+   <td style="text-align:left;"> Association parameter of interest in the outcome mechanism. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\theta_M$ </td>
+   <td style="text-align:left;"> -- </td>
+   <td style="text-align:left;"> Association parameter relating the true mediator to the outcome. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\theta_{XM}$ </td>
+   <td style="text-align:left;"> -- </td>
+   <td style="text-align:left;"> Association parameter for the interaction between $X$ and $M$ in the outcome mechanism. </td>
+  </tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>
