@@ -41,6 +41,6 @@ cov1 <- rnorm(sample_size)
 cov2 <- rnorm(sample_size, 1, 2)
 z_matrix <- matrix(c(cov1, cov2), nrow = sample_size, byrow = FALSE)
 estimated_gammas <- matrix(c(1, -1, .5, .2, -.6, 1.5), ncol = 2)
-P_Ystar_Y <- misclassification_prob(estimated_gammas, z_matrix)
-head(P_Ystar_Y)
+P_Ystar_M <- misclassification_prob(estimated_gammas, z_matrix)
+head(P_Ystar_M)
 }

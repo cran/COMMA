@@ -49,7 +49,7 @@ and slope (row 2) terms. The gamma parameter matrix columns correspond to the tr
 \eqn{M \in \{1, 2\}}.}
 
 \item{true_theta}{A column matrix of \eqn{\theta} parameter values (intercept, slope
-coefficient for \code{x}, slope coefficient for \code{m}, slope coefficient for \code{c}),
+coefficient for \code{x}, slope coefficient for \code{m}, slope coefficient for \code{c},
 and, optionally, slope coefficient for \code{xm} if using) to generate data
 in the outcome mechanism.}
 }

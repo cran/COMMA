@@ -13,9 +13,9 @@
 #' @return \code{true_classification_prob} returns a dataframe containing three columns.
 #'   The first column, \code{Subject}, represents the subject ID, from \eqn{1} to \code{n},
 #'   where \code{n} is the sample size, or equivalently, the number of rows in \code{x_matrix}.
-#'   The second column, \code{M}, represents a true, latent mediator category \eqn{Y \in \{1, 2 \}}.
+#'   The second column, \code{M}, represents a true, latent mediator category \eqn{M \in \{1, 2 \}}.
 #'   The last column, \code{Probability}, is the value of the equation
-#'   \eqn{P(Y_i = j | X_i) = \frac{\exp(X_i \beta)}{1 + \exp(X_i \beta)}} computed
+#'   \eqn{P(M_i = j | X_i) = \frac{\exp(X_i \beta)}{1 + \exp(X_i \beta)}} computed
 #'   for each subject and true, latent mediator category.
 #'
 #' @include pi_compute.R
@@ -31,8 +31,8 @@
 #' cov2 <- rnorm(sample_size, 1, 2)
 #' x_matrix <- matrix(c(cov1, cov2), nrow = sample_size, byrow = FALSE)
 #' estimated_betas <- matrix(c(1, -1, .5), ncol = 1)
-#' P_Y <- true_classification_prob(estimated_betas, x_matrix)
-#' head(P_Y)
+#' P_M <- true_classification_prob(estimated_betas, x_matrix)
+#' head(P_M)
 true_classification_prob <- function(beta_matrix,
                                      x_matrix){
 
@@ -57,7 +57,7 @@ true_classification_prob <- function(beta_matrix,
   Y_categories = rep(1:n_cat, each = sample_size)
   pi_matrix = pi_compute(beta_matrix, X, sample_size, n_cat)
   pi_df = data.frame(Subject = subject,
-                     Y = Y_categories,
+                     M = Y_categories,
                      Probability = c(pi_matrix))
 
   return(pi_df)

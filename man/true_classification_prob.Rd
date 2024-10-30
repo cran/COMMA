@@ -18,9 +18,9 @@ obtained from \code{COMMA_EM}, \code{COMMA_PVW}, or \code{COMMA_OLS}.}
 \code{true_classification_prob} returns a dataframe containing three columns.
 The first column, \code{Subject}, represents the subject ID, from \eqn{1} to \code{n},
 where \code{n} is the sample size, or equivalently, the number of rows in \code{x_matrix}.
-The second column, \code{M}, represents a true, latent mediator category \eqn{Y \in \{1, 2 \}}.
+The second column, \code{M}, represents a true, latent mediator category \eqn{M \in \{1, 2 \}}.
 The last column, \code{Probability}, is the value of the equation
-\eqn{P(Y_i = j | X_i) = \frac{\exp(X_i \beta)}{1 + \exp(X_i \beta)}} computed
+\eqn{P(M_i = j | X_i) = \frac{\exp(X_i \beta)}{1 + \exp(X_i \beta)}} computed
 for each subject and true, latent mediator category.
 }
 \description{
@@ -35,6 +35,6 @@ cov1 <- rnorm(sample_size)
 cov2 <- rnorm(sample_size, 1, 2)
 x_matrix <- matrix(c(cov1, cov2), nrow = sample_size, byrow = FALSE)
 estimated_betas <- matrix(c(1, -1, .5), ncol = 1)
-P_Y <- true_classification_prob(estimated_betas, x_matrix)
-head(P_Y)
+P_M <- true_classification_prob(estimated_betas, x_matrix)
+head(P_M)
 }

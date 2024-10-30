@@ -32,6 +32,9 @@ Installation
 --------------------------------------------------
 
 ``` r
+# Install from CRAN:
+install.packages("COMBO")
+
 # Install the development version from GitHub:
 # install.packages("devtools")
 devtools::install_github("kimberlywebb/COMMA")

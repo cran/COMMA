@@ -37,8 +37,8 @@
 #' cov2 <- rnorm(sample_size, 1, 2)
 #' z_matrix <- matrix(c(cov1, cov2), nrow = sample_size, byrow = FALSE)
 #' estimated_gammas <- matrix(c(1, -1, .5, .2, -.6, 1.5), ncol = 2)
-#' P_Ystar_Y <- misclassification_prob(estimated_gammas, z_matrix)
-#' head(P_Ystar_Y)
+#' P_Ystar_M <- misclassification_prob(estimated_gammas, z_matrix)
+#' head(P_Ystar_M)
 misclassification_prob <- function(gamma_matrix,
                                    z_matrix){
 
@@ -63,8 +63,8 @@ misclassification_prob <- function(gamma_matrix,
   Ystar_categories = rep(c(1:n_cat, 1:n_cat), each = sample_size)
   pistar_matrix = pistar_compute(gamma_matrix, Z, sample_size, n_cat)
   pistar_df = data.frame(Subject = subject,
-                         Y = Y_categories,
-                         Ystar = Ystar_categories,
+                         M = Y_categories,
+                         Mstar = Ystar_categories,
                          Probability = c(pistar_matrix))
 
   return(pistar_df)
