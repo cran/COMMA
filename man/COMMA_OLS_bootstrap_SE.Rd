@@ -14,7 +14,8 @@ COMMA_OLS_bootstrap_SE(
   c_matrix,
   tolerance = 1e-07,
   max_em_iterations = 1500,
-  em_method = "squarem"
+  em_method = "squarem",
+  random_seed = NULL
 )
 }
 \arguments{
@@ -54,6 +55,9 @@ the difference of subsequent log-likelihood estimates. The default is \code{1e-7
 \item{em_method}{A character string specifying which EM algorithm will be applied.
 Options are \code{"em"}, \code{"squarem"}, or \code{"pem"}. The default and
 recommended option is \code{"squarem"}.}
+
+\item{random_seed}{A numeric value specifying the random seed to set for bootstrap
+sampling. Default is \code{NULL}.}
 }
 \value{
 \code{COMMA_OLS_bootstrap_SE} returns a list with two elements: 1)
@@ -106,7 +110,8 @@ OLS_results
 OLS_SEs <- COMMA_OLS_bootstrap_SE(OLS_results$Estimates, sigma_estimate = 1,
                                   n_bootstrap = 3,
                                   n_parallel = 1,
-                                  x_matrix, z_matrix, c_matrix)
+                                  x_matrix, z_matrix, c_matrix,
+                                  random_seed = 1)
                                   
 OLS_SEs$bootstrap_SE
 }

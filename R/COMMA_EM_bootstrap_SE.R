@@ -34,6 +34,8 @@
 #' @param em_method A character string specifying which EM algorithm will be applied.
 #'   Options are \code{"em"}, \code{"squarem"}, or \code{"pem"}. The default and
 #'   recommended option is \code{"squarem"}.
+#' @param random_seed A numeric value specifying the random seed to set for bootstrap
+#'   sampling. Default is \code{NULL}.
 #'
 #' @return \code{COMMA_EM_bootstrap_SE} returns a list with two elements: 1)
 #' \code{bootstrap_df} and 2) \code{bootstrap_SE}. \code{bootstrap_df} is a data
@@ -94,8 +96,8 @@
 #'                                 n_parallel = 1,
 #'                                 outcome_distribution = "Bernoulli",
 #'                                 interaction_indicator = FALSE,
-#'                                 x_matrix, z_matrix, c_matrix)
-#'                                   
+#'                                 x_matrix, z_matrix, c_matrix,
+#'                                 random_seed = 1)                
 #' EM_SEs$bootstrap_SE
 #' }
 COMMA_EM_bootstrap_SE <- function(parameter_estimates,
@@ -108,7 +110,8 @@ COMMA_EM_bootstrap_SE <- function(parameter_estimates,
                                   x_matrix, z_matrix, c_matrix,
                                   tolerance = 1e-7,
                                   max_em_iterations = 1500,
-                                  em_method = "squarem"){
+                                  em_method = "squarem",
+                                  random_seed = NULL){
   
   n_cat = 2 # Number of categories in mediator
   sample_size = length(c(x_matrix)) # Sample size
@@ -141,6 +144,14 @@ COMMA_EM_bootstrap_SE <- function(parameter_estimates,
   bootstrap_df <- foreach(i = 1:n_bootstrap,
           .combine = rbind) %dopar% {
     
+    if(is.null(random_seed)){
+      random_seed_i <- NULL
+    } else {
+      random_seed_i <- random_seed + i
+    }
+    
+    set.seed(random_seed_i)
+            
     boot_sample_i <- COMMA_boot_sample(parameter_estimates,
                                        sigma_estimate,
                                        outcome_distribution,

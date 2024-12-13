@@ -16,7 +16,8 @@ COMMA_PVW_bootstrap_SE(
   c_matrix,
   tolerance = 1e-07,
   max_em_iterations = 1500,
-  em_method = "squarem"
+  em_method = "squarem",
+  random_seed = NULL
 )
 }
 \arguments{
@@ -65,6 +66,9 @@ the difference of subsequent log-likelihood estimates. The default is \code{1e-7
 \item{em_method}{A character string specifying which EM algorithm will be applied.
 Options are \code{"em"}, \code{"squarem"}, or \code{"pem"}. The default and
 recommended option is \code{"squarem"}.}
+
+\item{random_seed}{A numeric value specifying the random seed to set for bootstrap
+sampling. Default is \code{NULL}.}
 }
 \value{
 \code{COMMA_PVW_bootstrap_SE} returns a list with two elements: 1)
@@ -121,7 +125,8 @@ PVW_SEs <- COMMA_PVW_bootstrap_SE(PVW_results$Estimates,
                                   n_parallel = 1,
                                   outcome_distribution = "Bernoulli",
                                   interaction_indicator = FALSE,
-                                  x_matrix, z_matrix, c_matrix)
+                                  x_matrix, z_matrix, c_matrix,
+                                  random_seed = 1)
                                   
 PVW_SEs$bootstrap_SE
 }

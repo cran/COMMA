@@ -1,6 +1,6 @@
 Package: COMMA
 Title: Correcting Misclassified Mediation Analysis
-Version: 1.1.0
+Version: 1.1.1
 Authors@R: 
     person("Kimberly", "Webb",
            email = "kah343@cornell.edu", role = c("aut", "cre"))
@@ -34,6 +34,6 @@ Collate: 'sum_every_n1.R' 'sum_every_n.R' 'pistar_compute.R'
         'true_classification_prob.R' 'w_m_poissonY.R'
 LazyData: true
 NeedsCompilation: no
-Packaged: 2024-10-30 19:06:27 UTC; KIW58
+Packaged: 2024-12-13 20:40:28 UTC; KIW58
 Repository: CRAN
-Date/Publication: 2024-10-30 19:30:06 UTC
+Date/Publication: 2024-12-13 21:10:02 UTC
